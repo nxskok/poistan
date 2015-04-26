@@ -4,7 +4,7 @@
 #' 
 #' @param None.
 #' 
-#' @return Stan model object for passing into model-fitting functions.
+#' @return Stan model object for passing into model-describing functions.
 
 compiled.model=function()
 {

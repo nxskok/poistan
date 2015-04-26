@@ -6,15 +6,16 @@
 #' @param xylist data processed (fix)
 #' @param nit number of iterations of sampler
 #' 
-#' @return Stan sampling object
+#' @return list: Stan sampling object, names of teams
 
-sample.model=function(p.sc,xylist,nit=10000)
+sample_model=function(p.sc,xylist,nit=10000)
 {
   X=xylist$X
   Y=xylist$Y
   ng=nrow(X)
   nt=length(table(X))
-  sampling(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=nit)
+  list(z=sampling(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=nit),
+       names=xylist$names)
 }
 
 #' Posterior mode estimate of Poisson model

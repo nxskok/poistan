@@ -10,7 +10,7 @@ compiled.model()
 \item{None.}{}
 }
 \value{
-Stan model object for passing into model-fitting functions.
+Stan model object for passing into model-describing functions.
 }
 \description{
 Get object containing compiled Stan model
