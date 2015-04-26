@@ -22,6 +22,7 @@ show_rating=function(z) {
   ord=order(-s)
   ord
   dd=data.frame(who=z$names,off=o,def=d,sum=s,diff=o-d)
-  list(r=dd[ord,],h=mean(pars$h))
+  dds=dd[ord,]
+  list(r=dds,h=mean(pars$h))
 }
 

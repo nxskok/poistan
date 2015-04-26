@@ -9,4 +9,4 @@ Description: More stuff here later
 License: What license is it under?
 Lazydata: true
 Imports: rstan,
-    RSQLite
+    RSQLite,
