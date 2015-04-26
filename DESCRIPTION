@@ -1,9 +1,12 @@
 Package: poistan
 Type: Package
-Title: What the package does (short line)
+Title: Fit Poisson model to goal-scoring data via Stan
 Version: 1.0
 Date: 2015-04-25
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Ken Butler
+Maintainer: Ken Butler <butler@utsc.utoronto.ca>
+Description: More stuff here later
 License: What license is it under?
+Lazydata: true
+Imports: rstan,
+    RSQLite
