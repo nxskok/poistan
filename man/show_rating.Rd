@@ -4,10 +4,12 @@
 \alias{show_rating}
 \title{show mean ratings}
 \usage{
-show_rating(z)
+show_rating(z, ordering = "rat")
 }
 \arguments{
 \item{z}{output from sampling (list: `z` of class `stanfit`, `names` vector of team names)}
+
+\item{ordering}{how to order output: `rat` (default) orders by rating, `alph` orders by team name}
 }
 \value{
 list containing `r`: table of ratings, `h` home field advantage

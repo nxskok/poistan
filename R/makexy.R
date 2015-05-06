@@ -4,6 +4,7 @@
 #' 
 #' @return list containing design matrix of teams (as numbers), matrix of scores, names of teams
 #' 
+#' @export
 #' @examples makexy(m)
 
 makexy=function(res)

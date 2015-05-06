@@ -1,3 +1,12 @@
+#' Obtain predictive distribution for teams numbers i and j from fitted model z
+#' @param z fitted model from \code{sample_model}
+#' @param i number (not name) of home team
+#' @param j number (not name) of away team
+#' @return list of: \code{dist}, predictive probabilities of each score,
+#'   \code{prob} posterior predictive probabilities of win, draw and loss for
+#'   team \code{i} at home against team \code{j}.
+#' @export
+
 do_predict=function(z,i,j)
 {
   pars=extract(z$z)

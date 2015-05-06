@@ -1,0 +1,113 @@
+---
+title: "Estimating Team Strengths in Goal-Scoring Sports"
+author: "Ken Butler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimating Team Strengths}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Illustrating the use of `Poistan`
+=================================
+
+We illustrate how the package works using the two included data sets. 
+
+The fictitious data
+-------------------
+
+The data set `m` is made-up, but illustrates the kind of data that the package uses as input:
+
+```{r}
+library(poistan)
+data(m)
+m
+```
+
+The data frame has four columns: the names of the home and away teams, and the number of goals scored by each in the game where they met. Thus, each row represents a game.
+
+If necessary, the Stan model object must be compiled first:
+
+```{r,cache=TRUE}
+poisson.sc=compiled_model()
+poisson.sc
+```
+
+As long as the object `poisson.sc` is kept around, this only ever needs to be done once (eg.\ when the package is first installed). Fitting the same model to different data does not require recompiling the model.
+
+The model is this: each team has an offensive rating `o` and a defensive rating `d` that measures how likely the team is to score and concede goals respectively. There is also a home field advantage `h` (constant for all teams). Each has a prior normal distribution with mean 0 and SD 3. The number of goals scored by team $i$ playing at home against team $j$ has a Poisson distribution with mean $\exp(o_i-d_j+h)$, and the number of goals scored by team $j$ playing away against team $i$ has an independent Poisson distribution with mean $\exp(o_j-d_i)$. Stan is used to sample from the joint posterior distribution of the $o_i$, the $d_i$ and $h$. 
+
+Before fitting the model, we have to create a design matrix `X` and  response matrix `y` that represent the teams by numbers (and maintain a separate list of team names). This is done using `makexy`:
+
+```{r}
+xy=makexy(m)
+xy
+```
+
+Then we fit the model using the object `poisson.xc` and the `xy` object that we just created:
+
+```{r}
+z=sample_model(poisson.sc,xy)
+z
+```
+
+Our object `z` shows the (simulated) marginal posterior distributions for each of the parameters, along with some convergence information. This isn't so easy to read (since the team names have been replaced by numbers). To list the ratings of the teams, we do this:
+
+```{r}
+show_rating(z)
+```
+
+This shows the offensive and defensive ratings for each team, along with their sum (indicating the team's overall strength) and their difference (indicating whether each team is offensively or defensively minded given their overall strength).
+
+
+boilerplate
+-----------
+
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+## Vignette Info
+
+Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))

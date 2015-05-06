@@ -8,5 +8,8 @@ Maintainer: Ken Butler <butler@utsc.utoronto.ca>
 Description: More stuff here later
 License: What license is it under?
 Lazydata: true
-Imports: rstan,
+Imports: DBI,
+    rstan,
     RSQLite,
+Suggests: knitr
+VignetteBuilder: knitr

@@ -7,6 +7,7 @@
 #' @param nit number of iterations of sampler
 #' 
 #' @return list: Stan sampling object, names of teams
+#' @export
 
 sample_model=function(p.sc,xylist,nit=10000)
 {
@@ -14,7 +15,7 @@ sample_model=function(p.sc,xylist,nit=10000)
   Y=xylist$Y
   ng=nrow(X)
   nt=length(table(X))
-  list(z=sampling(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=nit),
+  list(z=rstan::sampling(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=nit),
        names=xylist$names)
 }
 
@@ -26,6 +27,7 @@ sample_model=function(p.sc,xylist,nit=10000)
 #' @param xylist data processed (fix)
 #' 
 #' @return Stan optimizing object
+#' @export
 
 
 optim.model=function(p.sc,xylist)
@@ -34,5 +36,5 @@ optim.model=function(p.sc,xylist)
   Y=xylist$Y
   ng=nrow(X)
   nt=max(X)
-  optimizing(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=10000)  
+  rstan::optimizing(p.sc,list(x=X,y=Y,ng=ng,nt=nt),iter=10000)  
 }

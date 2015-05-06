@@ -3,10 +3,11 @@
 #' Get object containing compiled Stan model
 #' 
 #' @param None.
-#' 
-#' @return Stan model object for passing into model-describing functions.
-
-compiled.model=function()
+#'   
+#' @return Stan model object for passing into model-fitting and model-describing
+#'   functions.
+#' @export
+compiled_model=function()
 {
   # home advantage added
   model='

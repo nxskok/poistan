@@ -1,0 +1,41 @@
+---
+title: "Using Poistan"
+author: "Ken Butler"
+date: '2015-05-06'
+output: html_document
+---
+
+Illustrating the use of `Poistan`
+=================================
+
+We illustrate how the package works using the two included data sets. 
+
+The fictitious data
+-------------------
+
+The data set `m` is made-up, but illustrates the kind of data that the package uses as input:
+
+```{r}
+library(poistan)
+data(m)
+m
+```
+
+The data frame has four columns: the names of the home and away teams, and the number of goals scored by each in the game where they met. Thus, each row represents a game.
+
+If necessary, the Stan model object must be compiled first:
+
+```{r,cache=TRUE}
+poisson.sc=poistan:::compiled_model()
+poisson.sc
+```
+
+As long as the object `poisson.sc` is kept around, this only ever needs to be done once (eg.\ when the package is first installed).
+
+Before fitting the model, we have to create a design matrix `X` and  response matrix `y` that represent the teams by numbers (and maintain a separate list of team names). This is done using `makexy`:
+
+```{r}
+xy=poistan:::makexy(m)
+xy
+```
+
