@@ -1,0 +1,96 @@
+---
+title: "Obtaining data from the database"
+author: "Ken Butler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Obtaining data from the database}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Introduction
+============
+
+Obtaining a league's worth of data from the data base means finding out which numerical ID the league in question has. This comes a database table of which this is an excerpt (using `sample_n` from `dplyr` to sample some rows at random):
+
+```{r}
+library(poistan)
+library(dplyr)
+library(RSQLite)
+comp_list() %>% sample_n(10) %>% knitr::kable()
+```
+
+The second column `id` shows the IDs of the competitions in question. The problem is that we don't know which years these competitions belong to. So we need to do some searching. The function `find_comp` takes a date-of-last-scheduled game and a pattern to search for, and returns the competitions that match arranged in date order of last game:
+
+```{r}
+find_comp("2015-04-01","Scot")
+```
+
+Let's suppose we were searching for the Scottish Premiership. This season is in two parts. In the first part, 12 teams play 33 games against each other, and in the second part the league is divided into the "top half" and the "bottom half", and each team plays five more games against teams in its half of the table. Suppose further that we want the results from the first part of the season, which finished sometime in April. This looks like line 7, competition 25295:
+
+
+```{r}
+scotland=get_comp(25295) 
+dim(scotland)
+```
+
+There ought to be $3{12\choose 2}=198$ games. I don't know what happened to the rest.
+
+And then, as in the other vignette, we can sample from the posterior distribution:
+
+```{r,cache=TRUE,echo=FALSE,results="hide"}
+poisson.sc=compiled_model()
+```
+
+```{r}
+xy=makexy(scotland)
+z=sample_model(poisson.sc,xy)
+scotland.1=show_rating(z)
+knitr::kable(scotland.1$r)
+scotland.1$h
+```
+
+Celtic appear to be much stronger than the other teams, even second-placed Aberdeen. Their particular strength is defensively, since the difference is the second-most negative difference of all the teams.
+
+We might wonder whether the predictive distribution shows this. Celtic is team number 2 and Aberdeen team number 1:
+
+```{r}
+do_predict(z,2,1)
+```
+
+Celtic are likely to win, but neither team is likely to score many goals.
+
+And as for a team like St Mirren, well, they should pose no threat to Celtic at all, either with Celtic at home:
+
+```{r}
+do_predict(z,2,12)
+```
+
+or away:
+
+```{r}
+do_predict(z,12,2)
+```
+
+Comparing the posterior probabilities of win, draw and loss on these two examples gives us a sense of the typical size of the home field advantage. Celtic are strong favourites to win both ways, but when playing at home, St Mirren have a somewhat bigger chance of getting something out of the game.
+
+I mentioned earlier that the Scottish Premiership season comes in two parts. What about if we wanted ratings for the whole thing together? The function `get_comps` takes a *vector* of competition IDs and returns *one* data frame of those competitions combined. In this case, the competitions we want are:
+
+```{r}
+find_comp("2015-04-01","Scotland - Premier")
+```
+
+25295 and 25297:
+
+```{r}
+scot2=get_comps(c(25295,25297))
+xy=makexy(scot2)
+sc2=sample_model(poisson.sc,xy)
+zz=show_rating(sc2)
+knitr::kable(zz$r)
+zz$h
+```
+
+This is, not surprisingly, very similar to before (since we have only added a few games).
+I also need to think about searching for teams and returning team ids.

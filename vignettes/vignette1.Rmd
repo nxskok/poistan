@@ -102,7 +102,7 @@ do_predict(z,18,10)
 Some of the most likely scores are 1-1, 2-1 (both ways) and 2-2.
 
 Now Aston Villa and Burnley (with Burnley at home):
-
+  
 ```{r}
 do_predict(z,3,2)
 ```

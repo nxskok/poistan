@@ -10,12 +10,12 @@ connect=function(what="SQLite",name="/home/ken/sports/scoresway/soccer.db") {
   con
 }
 
-#' get competition from data base
+#' get competition(s) from data base
 #' 
-#' @param id competition id
+#' @param id competition id (scalar)
 #' 
 #' @return data frame of results
-
+#' @export
 get_comp=function(id) {
   con=connect()
   q1="select s.date, t1.name, t2.name, s.score from scores as s, teams as t1, teams as t2  where s.comp="
@@ -33,6 +33,16 @@ get_comp=function(id) {
              s2=as.numeric(s2),stringsAsFactors=F)
 }
 
+#' get several comps and glue results into one data frame
+#' @param v vector of competition IDs
+#' @return data frame of games like \code{get_comp}
+#' @export
+#' 
+get_comps=function(v) {
+  zz=lapply(v,get_comp)
+  dplyr::bind_rows(zz)
+}
+
 
 # sql code to get max date for each comp
 # select max(date), comp from scores group by comp;
@@ -42,6 +52,7 @@ get_comp=function(id) {
 #' @return data frame of competition IDs (in \code{comp}) and last date (in \code{date}, as \code{Date})
 #' 
 #' @import dplyr
+#' @export
 last_date=function() {
   con=connect()
   query="select max(date), comp from scores group by comp;"
@@ -55,6 +66,7 @@ last_date=function() {
 #' Data frame of competition names and ids
 #' @param none
 #' @return data frame of competition numbers (in \code{id}) and competition names (in \code{name})
+#' @export
 
 comp_list=function() {
   con=connect()
@@ -69,6 +81,7 @@ comp_list=function() {
 #' @param lim_date Date that matches must be after
 #' @return Data frame: \code{date} is date of last scheduled match in league,
 #'   \code{comp} is competition number, \code{name} is name of competition
+#' @export
 comp_by_last_date=function(lim_date) {
   last=last_date()
   comps=comp_list()
@@ -80,6 +93,7 @@ comp_by_last_date=function(lim_date) {
 #' @param pat Pattern to match in league name
 #' @return data frame: \code{date} is date of last game in league, \code{comp}
 #'   is competition number, \code{name} is competition name
+#' @export
 find_comp=function(date,pat) {
   comp_by_last_date(date) %>% filter(grepl(pat,name)) %>% arrange(date)
 }

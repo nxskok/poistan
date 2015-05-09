@@ -2,17 +2,17 @@
 % Please edit documentation in R/get_data.R
 \name{get_comp}
 \alias{get_comp}
-\title{get competition from data base}
+\title{get competition(s) from data base}
 \usage{
 get_comp(id)
 }
 \arguments{
-\item{id}{competition id}
+\item{id}{competition id (scalar)}
 }
 \value{
 data frame of results
 }
 \description{
-get competition from data base
+get competition(s) from data base
 }
 
