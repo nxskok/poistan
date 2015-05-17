@@ -84,8 +84,8 @@ find_comp("2015-04-01","Scotland - Premier")
 25295 and 25297:
 
 ```{r}
-scot2=get_comps(c(25295,25297))
-xy=makexy(scot2)
+scot_more=get_comps(c(25295,25297))
+xy=makexy(scot_more)
 sc2=sample_model(poisson.sc,xy)
 zz=show_rating(sc2)
 knitr::kable(zz$r)
@@ -93,4 +93,6 @@ zz$h
 ```
 
 This is, not surprisingly, very similar to before (since we have only added a few games).
+
+
 I also need to think about searching for teams and returning team ids.

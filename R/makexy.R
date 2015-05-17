@@ -9,10 +9,10 @@
 
 makexy=function(res)
 {
-  f=factor(c(res[,1],res[,2]))
+  f=factor(c(res$t1,res$t2))
   ll=split_half(f)
   x=cbind(as.numeric(ll[[1]]),as.numeric(ll[[2]]))
-  y=cbind(res[,3],res[,4]) 
+  y=cbind(res$s1,res$s2) 
   list(X=x,Y=y,names=levels(f))
 }
 

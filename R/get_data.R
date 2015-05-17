@@ -5,8 +5,9 @@
 #' @return connection
 #' 
 connect=function(what="SQLite",name="/home/ken/sports/scoresway/soccer.db") {
-  m=DBI::dbDriver("SQLite")
-  con=RSQLite::dbConnect(m,"/home/ken/sports/scoresway/soccer.db")
+  #m=DBI::dbDriver("SQLite")
+  m=RSQLite::SQLite()
+  con=RSQLite::dbConnect(m,name)
   con
 }
 
